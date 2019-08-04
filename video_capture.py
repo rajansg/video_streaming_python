@@ -6,13 +6,20 @@ import datetime
 
 
 class VideoCapture(threading.Thread):
+    """Thread where the frames camera are captured
+    
+    Arguments:
+        threading {[Thread} -- type Thread    
+    """
     def __init__(self):
         threading.Thread.__init__(self)
         self.frame = None
-        self.off_air_frame = cv2.imread('off_air.jpg')
+        self.off_air_frame = cv2.imread('resources/off_air.jpg')
         self.off_air_frame = cv2.resize(self.off_air_frame, (config.frame_size_w, config.frame_size_h))
         
     def run(self):
+        """Capture the camera frames
+        """
         cap = cv2.VideoCapture(config.camera_path)
                 
         while True:
@@ -32,6 +39,11 @@ class VideoCapture(threading.Thread):
         cv2.destroyAllWindows()
 
     def draw_stuffs(self, image):
+        """Draw some things in the screen
+        
+        Arguments:
+            image {Mat} -- OpenCV image
+        """
         frame_h, frame_w, _ = image.shape
         image = cv2.flip(image,1)
         cv2.circle(image,(15,20), 7, (0,0,255), -1)
@@ -43,6 +55,11 @@ class VideoCapture(threading.Thread):
         return image
 
     def set_frame(self, frame):
+        """Set frame attribute value
+        
+        Arguments:
+            frame {Mat} -- OpenCV image
+        """
         _, buffer = cv2.imencode('.jpg', frame)
         self.frame = buffer.tostring()
 
